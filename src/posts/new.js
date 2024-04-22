@@ -10,7 +10,7 @@ function NewPost() {
 
   const yourConfig = {
     headers: {
-       Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZlbmthdEBnbWFpbC5jb20iLCJ1c2VySWQiOjMsInVzZXJuYW1lIjoiVmVua2F0IiwiaWF0IjoxNzEzNzg2Nzg4LCJleHAiOjE3MTM3OTAzODh9.yckK-YR0UZxrPQfFSkwqwBLOx0btvG1O4Y3e7HtZPtQ"
+       Authorization: "Bearer " + process.env.REACT_APP_BEARER_TOKEN
     }
   }
 
@@ -76,7 +76,7 @@ function NewPost() {
           <textarea id="description" {...register('description', { required: 'Description is required' })} className="form-control" />
         </div>
 
-        {/* Add user_id input if needed */}
+        {/* Placeholder */}
         <input type="hidden" name="user_id" value="3" />
 
         <div className="change-categories">
