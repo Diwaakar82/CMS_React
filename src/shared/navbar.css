@@ -74,3 +74,8 @@ a:hover
   background-color: red;
   color: white !important;
 }
+
+.active
+{
+  font-weight: bold;
+}

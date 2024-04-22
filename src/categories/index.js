@@ -10,8 +10,11 @@ const Categories = () => {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get(`/categories`);
-                console.log(response);
                 setCategories(response.data);
+
+                document.querySelectorAll('.category-nav').forEach(function(element) {
+                    element.classList.add('active');
+                });
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }

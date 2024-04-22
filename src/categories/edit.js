@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function CategoryEdit() {
@@ -7,6 +7,14 @@ function CategoryEdit() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [errors, setErrors] = useState([]);
+  const location = useLocation();
+  const { categoryName } = location.state
+
+  useEffect(() => {
+    document.querySelectorAll('.category-nav').forEach(function(element) {
+      element.classList.add('active');
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +51,7 @@ function CategoryEdit() {
           <input
             type="text"
             id="title"
-            value={title}
+            value={categoryName}
             onChange={(e) => setTitle(e.target.value)}
             className="form-control"
           />

@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function CategoryNew() {
   const [title, setTitle] = useState('');
   const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    document.querySelectorAll('.category-nav').forEach(function(element) {
+      element.classList.add('active');
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

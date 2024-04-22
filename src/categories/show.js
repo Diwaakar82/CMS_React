@@ -15,6 +15,10 @@ function CategoryShow() {
         const response = await axios.get(`/categories/posts/${categoryId}`);
 		
 		setCategoryPosts(response.data);
+
+		document.querySelectorAll('.category-nav').forEach(function(element) {
+			element.classList.add('active');
+		  });
       } catch (error) {
         console.error('Error fetching category:', error.response, error.config);
       }
@@ -61,7 +65,7 @@ function CategoryShow() {
       <h1 className="category_title">{categoryName}</h1>
 
       <div className="post-actions">
-        <Link to={`/categories/${categoryId}/edit`} className="links">Edit</Link>
+        <Link to={`/categories/${categoryId}/edit`} state={{ categoryName: categoryName }} className="links">Edit</Link>
         <button onClick={handleDelete} className="delete-button">Delete</button>
       </div>
 	

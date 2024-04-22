@@ -9,9 +9,9 @@ function Home() {
       <Link to="/categories" className="welcome_button">Categories</Link>
 
       <Link to="/posts" className="welcome_button">Posts</Link>
-      {/* {userSignedIn && (
-        <Link to={`/users/${currentUserId}/my_posts`} className="welcome_button">My Posts</Link>
-      )} */}
+
+      {/* Placeholder */}
+      <Link to={`/users/1/my_posts`} className="welcome_button">My Posts</Link>
     </div>
   );
 }
