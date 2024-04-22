@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function CategoryShow() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
-  const [category, setCategory] = useState(null);
-  
+  const [categoryPosts, setCategoryPosts] = useState(null);
+  const location = useLocation();
+  const { categoryName } = location.state
+
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         const response = await axios.get(`/categories/posts/${categoryId}`);
-        setCategory(response.data);
+		
+		setCategoryPosts(response.data);
       } catch (error) {
         console.error('Error fetching category:', error.response, error.config);
       }
@@ -31,20 +34,23 @@ function CategoryShow() {
     }
   };
 
-  if (!category) {
-    <div>
-      <div className="button-container" style={{ textAlign: 'left' }}>
-        <button onClick={() => navigate(-1)} className="like-button">Back</button>
-      </div>
-
-      <h1 className="category_title">{category.title}</h1>
-
-      <div className="post-actions">
-        <Link to={`/edit/${categoryId}`} className="links">Edit</Link>
-        <button onClick={handleDelete} className="delete-button">Delete</button>
-      </div>
-	</div>
+  if (!categoryPosts) {
+    return <div>Loading...</div>;
   }
+
+    // <div>
+    //   <div className="button-container" style={{ textAlign: 'left' }}>
+    //     <button onClick={() => navigate(-1)} className="like-button">Back</button>
+    //   </div>
+
+    //   <h1 className="category_title">{category.title}</h1>
+
+    //   <div className="post-actions">
+    //     <Link to={`/edit/${categoryId}`} className="links">Edit</Link>
+    //     <button onClick={handleDelete} className="delete-button">Delete</button>
+    //   </div>
+	// </div>
+
 
   return (
     <div>
@@ -52,25 +58,28 @@ function CategoryShow() {
         <button onClick={() => navigate(-1)} className="like-button">Back</button>
       </div>
 
-      <h1 className="category_title">{category.title}</h1>
+      <h1 className="category_title">{categoryName}</h1>
 
       <div className="post-actions">
-        <Link to={`/edit/${categoryId}`} className="links">Edit</Link>
+        <Link to={`/categories/${categoryId}/edit`} className="links">Edit</Link>
         <button onClick={handleDelete} className="delete-button">Delete</button>
       </div>
 	
       <div className="post-container">
-        {category.posts.map(post => (
-          <div key={post.id} className="post">
+        {categoryPosts.map(post => (
+          <div key={post.ID} className="post">
             <div className="post-title">
-              <Link to={`/posts/${post.id}`}>{post.title}</Link>
+              <Link to={`/posts/${post.ID}`}>{post.TITLE}</Link>
             </div>
 
             <div className="post-actions">
-              <Link to={`/edit/${post.id}`}>Edit</Link>
-              {/* <button onClick={() => handlePostDelete(post.id)} className="delete-button">
+              <Link to={`/edit/${post.ID}`}>Edit</Link>
+
+			  {/* onClick={() => handlePostDelete(post.ID)} */}
+
+              <button className="delete-button">
                 Delete
-              </button> */}
+              </button>
             </div>
           </div>
         ))}

@@ -1,0 +1,112 @@
+.button-container 
+{
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.like-button 
+{
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #28a745;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+  
+.like-button:hover 
+{
+  background-color: #218838;
+}
+
+.category_title
+{
+  text-align: center;
+  margin-top: 50px;
+}
+
+.categories
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px 300px 20px 300px;
+  overflow-y: auto;
+  height: 300px;
+}
+
+.links
+{
+  margin-bottom: 20px;
+  border: 2px solid black;
+  padding: 10px 20px;
+  background-color: #333;
+  border-radius: 5px;
+}
+
+.links:hover
+{
+  background-color: #ddd;
+  color: #1a1a1a;
+}
+
+.post-container 
+{
+  text-align: center;
+  margin: 0px 400px 30px 400px;
+  overflow-y: auto;
+  height: 300px;
+}
+  
+.post 
+{
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px 100px;
+  text-align: center;
+}
+
+.post-title 
+{
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.post-description 
+{
+  margin-bottom: 5px;
+}
+
+.post-actions 
+{
+  margin: 30px 0px;
+  text-align: center;
+}
+
+.form-group 
+{
+  text-align: left;
+}
+
+.form-label 
+{
+  font-weight: bold;
+}
+
+.form-control 
+{
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.category-form 
+{
+  width: 300px;
+  margin: 0 auto;
+}

@@ -28,3 +28,49 @@
   padding: 14px 16px;
   text-decoration: none;
 }
+
+body 
+{
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+a
+{
+  text-decoration: none;
+  color: #f1f1f1;
+}
+
+a:hover
+{
+  background-color: #f1f1f1;
+  color: black !important;
+}
+
+.landing_page 
+{
+  display: block;
+  text-align: center;
+  color: white;
+  background-color: #333;
+  padding: 50px 0px 50px 0px;
+  margin: 200px 200px 0px 200px;
+}
+
+.delete-button
+{
+  margin-bottom: 20px;
+  border: 2px solid black;
+  padding: 10px 20px;
+  background-color: #ff5157;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #f1f1f1;
+  margin-left: 5px;
+}
+
+.delete-button:hover
+{
+  background-color: red;
+  color: white !important;
+}

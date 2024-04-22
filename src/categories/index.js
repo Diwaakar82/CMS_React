@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import "./categories.css"
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
@@ -28,7 +29,7 @@ const Categories = () => {
             <h1 className="category_title">Categories</h1>
             <div className="categories">
                 {categories.map(category => (
-                    <Link key={category.id} to={`/categories/posts/${category.id}`} className="links">
+                    <Link key={category.id} to={`/categories/posts/${category.id}`} state={{ categoryName: category.title }} className="links">
                         {category.title}
                     </Link>
                 ))}
