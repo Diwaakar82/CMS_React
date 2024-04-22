@@ -8,6 +8,8 @@ import CategoryEdit from "./categories/edit";
 import CategoryNew from "./categories/new";
 import Posts from "./posts";
 import NewPost from "./posts/new";
+import EditPost from "./posts/edit";
+import PostDetails from "./posts/show";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
             {/* Post Paths */}
             <Route path = "posts" element = {<Posts />} />
             <Route path = "/posts/new" element = {<NewPost />} />
+            <Route path = "posts/:postId/edit" element = {<EditPost />} />
+            <Route path = "posts/:postId" element = {<PostDetails />} />
         </Route>
       <Route path = "*" element = {<NoPage />} />
       </Routes>
