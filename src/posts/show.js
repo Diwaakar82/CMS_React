@@ -5,6 +5,8 @@ import axios from 'axios';
 function PostDetails() {
   const { postId } = useParams();
   const [ post, setPost ] = useState(null);
+  const [ deleteComment, setDeleteComment ] = useState(false);
+
   const navigate = useNavigate();
 
   const yourConfig = {
@@ -18,6 +20,7 @@ function PostDetails() {
         try {
           const response = await axios.get(`/posts/${postId}`, yourConfig);
           setPost(response.data[0]);
+          console.log(response.data[0]);
         } catch (error) {
           console.error('Error fetching post:', error);
         }
@@ -31,9 +34,20 @@ function PostDetails() {
       try {
         await axios.delete(`/posts/${post.ID}`, yourConfig);
         navigate('/posts');
-        // Handle post deletion
       } catch (error) {
         console.error('Failed to delete post:', error);
+      }
+    }
+  };
+
+  const handleCommentDelete = async (commentId) => {
+    console.log(commentId);
+    if (window.confirm('Are you sure?')) {
+      try {
+        await axios.delete(`/posts/${post.ID}/comments/${commentId}`, yourConfig);
+        setDeleteComment(!deleteComment);
+      } catch (error) {
+        console.error('Failed to delete comment:', error);
       }
     }
   };
@@ -74,11 +88,10 @@ function PostDetails() {
           <h2>Comments:</h2>
           {post.comments.map(comment => (
             <div key={comment.id} className="comment">
-              <p><strong>Commenter:</strong> {comment.commenter}</p>
-              <p><strong>Comment:</strong> {comment.text}</p>
+              <p><strong>Commenter:</strong> {comment.id}</p>
+              <p><strong>Comment:</strong> {comment.TEXT}</p>
               <div className="comment-actions">
-              {/* onClick={() => handleDeleteComment(comment.id)} */}
-                <button className="delete-button">Delete</button>
+                <button onClick={() => handleCommentDelete(comment.id)} className="delete-button">Delete</button>
               </div>
             </div>
           ))}
