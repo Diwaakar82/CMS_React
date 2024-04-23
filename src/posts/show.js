@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function PostDetails() {
   const { postId } = useParams();
   const [ post, setPost ] = useState(null);
+  const navigate = useNavigate();
 
   const yourConfig = {
     headers: {
@@ -17,7 +18,6 @@ function PostDetails() {
         try {
           const response = await axios.get(`/posts/${postId}`, yourConfig);
           setPost(response.data[0]);
-          console.log(response.data[0]);
         } catch (error) {
           console.error('Error fetching post:', error);
         }
@@ -29,7 +29,8 @@ function PostDetails() {
   const handleDelete = async () => {
     if (window.confirm('Are you sure?')) {
       try {
-        await axios.delete(`/posts/${post.ID}`);
+        await axios.delete(`/posts/${post.ID}`, yourConfig);
+        navigate('/posts');
         // Handle post deletion
       } catch (error) {
         console.error('Failed to delete post:', error);
@@ -49,12 +50,15 @@ function PostDetails() {
 
       <p><strong>Description:</strong> {post.DESCRIPTION}</p>
       <p>{post.LIKES === 1 ? 'Like: ' : 'Likes: '}{post.LIKES}</p>
-      <p>
-        <strong>Categories:</strong>
-        {/* {post.categories.map(category => (
-          <span key={category.id}>{category.title}, </span>
-        ))} */}
-      </p>
+
+      {post.categories.length > 0 &&
+        <p>
+          <strong>Categories:</strong>
+          {post.categories.map(category => (
+            <span key={category.ID}> {category.TITLE} </span>
+          ))}
+        </p>
+      }
       <div className="post-actions">
         <Link to={`/posts/${post.ID}/edit`} className="links">Edit</Link>
         <button onClick={handleDelete} className="delete-button">Delete</button>
@@ -65,19 +69,21 @@ function PostDetails() {
       <div className="comment-form">
         {/* Comment form */}
       </div>
-      <div className="post-comment-box">
-        <h2>Comments:</h2>
-        {post.comments.map(comment => (
-          <div key={comment.id} className="comment">
-            <p><strong>Commenter:</strong> {comment.commenter}</p>
-            <p><strong>Comment:</strong> {comment.text}</p>
-            <div className="comment-actions">
-            {/* onClick={() => handleDeleteComment(comment.id)} */}
-              <button className="delete-button">Delete</button>
+      {post.comments && (
+        <div className="post-comment-box">
+          <h2>Comments:</h2>
+          {post.comments.map(comment => (
+            <div key={comment.id} className="comment">
+              <p><strong>Commenter:</strong> {comment.commenter}</p>
+              <p><strong>Comment:</strong> {comment.text}</p>
+              <div className="comment-actions">
+              {/* onClick={() => handleDeleteComment(comment.id)} */}
+                <button className="delete-button">Delete</button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
