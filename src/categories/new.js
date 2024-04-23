@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function CategoryNew() {
   const [title, setTitle] = useState('');
   const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
+
+  const yourConfig = {
+    headers: {
+        Authorization: "Bearer " + process.env.REACT_APP_BEARER_TOKEN
+    }
+  }
 
   useEffect(() => {
     document.querySelectorAll('.category-nav').forEach(function(element) {
@@ -14,7 +22,8 @@ function CategoryNew() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/categories', { title });
+      await axios.post('/categories', { title }, yourConfig);
+      navigate('/categories');
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
         setErrors(error.response.data.errors);

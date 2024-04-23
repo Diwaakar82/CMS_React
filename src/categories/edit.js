@@ -5,12 +5,21 @@ import axios from 'axios';
 function CategoryEdit() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
   const [errors, setErrors] = useState([]);
+  const [category, setCategory] = useState('');
+
   const location = useLocation();
   const { categoryName } = location.state
 
+  const yourConfig = {
+    headers: {
+        Authorization: "Bearer " + process.env.REACT_APP_BEARER_TOKEN
+    }
+  }
+
   useEffect(() => {
+    setCategory(categoryName);
+
     document.querySelectorAll('.category-nav').forEach(function(element) {
       element.classList.add('active');
     });
@@ -19,8 +28,8 @@ function CategoryEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`/categories/${categoryId}`, { title });
-      navigate(`/categories/${categoryId}`);
+      await axios.patch(`/categories/${categoryId}`, {'title': category}, yourConfig);
+      navigate(`/categories/posts/${categoryId}`, {state: { categoryName: category }});
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
         setErrors(error.response.data.errors);
@@ -46,13 +55,14 @@ function CategoryEdit() {
       )}
 
       <form onSubmit={handleSubmit} className="category-form">
+        <input type="hidden" name="_method" value="patch" />
         <div className="form-group">
           <label htmlFor="title" className="form-label">Title</label><br />
           <input
             type="text"
             id="title"
-            value={categoryName}
-            onChange={(e) => setTitle(e.target.value)}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
             className="form-control"
           />
         </div>

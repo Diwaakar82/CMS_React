@@ -10,6 +10,12 @@ function CategoryShow() {
   const location = useLocation();
   const { categoryName } = location.state
 
+  const yourConfig = {
+    headers: {
+        Authorization: "Bearer " + process.env.REACT_APP_BEARER_TOKEN
+    }
+  }
+
   useEffect(() => {
     const fetchCategory = async () => {
       try {
@@ -31,7 +37,7 @@ function CategoryShow() {
   const handleDelete = async () => {
     if (window.confirm('Are you sure?')) {
       try {
-        await axios.delete(`/categories/${categoryId}`);
+        await axios.delete(`/categories/${categoryId}`, yourConfig);
         navigate('/categories');
       } catch (error) {
         console.error('Failed to delete category:', error);

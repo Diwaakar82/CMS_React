@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function EditPost() {
   const { postId } = useParams();
+  const navigate = useNavigate();
   const [ errors, setErrors ] = useState([]);
   const [ categories, setCategories ] = useState([]);
   const [ categoryIds, setCategoryIds ] = useState([]);
@@ -38,9 +39,9 @@ function EditPost() {
       body['description'] = formData.get('description');
       body['category_ids'] = categoryIds;
 
-      console.log(yourConfig);
-
       await axios.patch(`/posts/${post.ID}`, body, yourConfig);
+
+      navigate(`/posts/${post.ID}`);
     } catch (error) {
         if (error.response) {
             setErrors(error.response.data.errors);
