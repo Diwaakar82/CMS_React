@@ -6,6 +6,7 @@ function CategoryShow() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
   const [categoryPosts, setCategoryPosts] = useState(null);
+
   const location = useLocation();
   const { categoryName } = location.state
 
@@ -41,20 +42,6 @@ function CategoryShow() {
   if (!categoryPosts) {
     return <div>Loading...</div>;
   }
-
-    // <div>
-    //   <div className="button-container" style={{ textAlign: 'left' }}>
-    //     <button onClick={() => navigate(-1)} className="like-button">Back</button>
-    //   </div>
-
-    //   <h1 className="category_title">{category.title}</h1>
-
-    //   <div className="post-actions">
-    //     <Link to={`/edit/${categoryId}`} className="links">Edit</Link>
-    //     <button onClick={handleDelete} className="delete-button">Delete</button>
-    //   </div>
-	// </div>
-
 
   return (
     <div>

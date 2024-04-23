@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function EditPost() {
@@ -8,6 +8,9 @@ function EditPost() {
   const [ categories, setCategories ] = useState([]);
   const [ categoryIds, setCategoryIds ] = useState([]);
   const [ post, setPost ] = useState(null);
+
+  const location = useLocation();
+  const { currentPost } = location.state
 
   const yourConfig = {
     headers: {
@@ -29,8 +32,15 @@ function EditPost() {
     event.preventDefault();
     try {
       const formData = new FormData(event.target);
-      formData['category_ids'] = categoryIds;
-      await axios.patch(`/posts/${post.id}`, formData, yourConfig);
+
+      const body = {}
+      body['title'] = formData.get('title');
+      body['description'] = formData.get('description');
+      body['category_ids'] = categoryIds;
+
+      console.log(yourConfig);
+
+      await axios.patch(`/posts/${post.ID}`, body, yourConfig);
     } catch (error) {
         if (error.response) {
             setErrors(error.response.data.errors);
@@ -45,6 +55,7 @@ function EditPost() {
         try {
           const response = await axios.get(`/posts/${postId}`, yourConfig);
           setPost(response.data[0]);
+          setCategoryIds(response.data[0].categories.map(category => (category.id)));
         } catch (error) {
           console.error('Error fetching post:', error);
         }
@@ -64,7 +75,13 @@ function EditPost() {
     };
 
     fetchCategories();
-    fetchPost();
+    if(currentPost)
+    {
+      setPost(currentPost);
+      setCategoryIds(currentPost.categories.map(category => (category.id)));
+    }
+    else
+      fetchPost();
   }, [postId]);
 
   return (
@@ -72,7 +89,7 @@ function EditPost() {
       <h2>Edit Post</h2>
       {post && (
       <form onSubmit={handleSubmit}>
-        {errors.length > 0 && (
+        {/* {errors.length > 0 && (
           <div id="error_explanation">
             <h2>{errors.length} {errors.length === 1 ? 'error' : 'errors'} prohibited this post from being saved:</h2>
             <ul>
@@ -81,7 +98,7 @@ function EditPost() {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
 
         <input type="hidden" name="_method" value="patch" />
         
@@ -103,7 +120,8 @@ function EditPost() {
           <br />
           {categories.map(category => (
             <div key={category.id}>
-                <input type="checkbox" id={category.id} name={category.title} value={category.id} onChange={handleCheck} />
+                {console.log(post.categories, categoryIds, categoryIds.includes(category.id))}
+                <input type="checkbox" id={category.id} name={category.title} value={category.id} checked={categoryIds.includes(category.id)} onChange={handleCheck} />
                 <label>{category.title}</label>
                 <br />
             </div>

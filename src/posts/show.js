@@ -7,6 +7,7 @@ function PostDetails() {
   const [ post, setPost ] = useState(null);
   const [ deleteComment, setDeleteComment ] = useState(false);
 
+
   const navigate = useNavigate();
 
   const yourConfig = {
@@ -69,12 +70,12 @@ function PostDetails() {
         <p>
           <strong>Categories:</strong>
           {post.categories.map(category => (
-            <span key={category.ID}> {category.TITLE} </span>
+            <span key={category.id}> {category.title} </span>
           ))}
         </p>
       }
       <div className="post-actions">
-        <Link to={`/posts/${post.ID}/edit`} className="links">Edit</Link>
+        <Link to={`/posts/${post.ID}/edit`} state={{ currentPost: post }} className="links">Edit</Link>
         <button onClick={handleDelete} className="delete-button">Delete</button>
       </div>
       <div className="like-button">
