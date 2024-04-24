@@ -8,9 +8,11 @@ function NewPost() {
   const [ categories, setCategories ] = useState([]);
   const [ categoryIds, setCategoryIds ] = useState([]);
 
+  const storedData = JSON.parse(localStorage.getItem('userData'));
+
   const yourConfig = {
     headers: {
-       Authorization: "Bearer " + process.env.REACT_APP_BEARER_TOKEN
+       Authorization: "Bearer " + storedData['token']
     }
   }
 
@@ -76,8 +78,7 @@ function NewPost() {
           <textarea id="description" {...register('description', { required: 'Description is required' })} className="form-control" />
         </div>
 
-        {/* Placeholder */}
-        <input type="hidden" name="user_id" value="3" />
+        <input type="hidden" name="user_id" value={storedData['userId']} />
 
         <div className="change-categories">
           <div>Change categories</div>

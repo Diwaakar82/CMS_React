@@ -14,11 +14,13 @@ export const useAuth = () => {
     const [token, setToken] = useState(false);
     const [userId, setUserId] = useState('');
     const [name, setName] = useState('');
-  
+
     const login = useCallback((uid, token, name) => {
       setToken(token);
       setUserId(uid);
       setName(name);
+
+      
 
       localStorage.setItem('userData',JSON.stringify({
         userId: uid,
@@ -28,6 +30,7 @@ export const useAuth = () => {
     }, []);
   
     const logout = useCallback(() => {
+
       setToken(null);
       setUserId(null);
       setName(null);

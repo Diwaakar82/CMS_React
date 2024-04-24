@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../shared/auth";
 import axios from 'axios';
 
@@ -25,7 +25,6 @@ const LogIn = () => {
 
         try {
             const response = await axios.post('/users/login', user);
-            console.log(response);
 
             const data = response['data'];
             

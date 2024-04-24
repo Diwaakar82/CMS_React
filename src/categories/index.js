@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import "./categories.css"
+import { AuthContext } from '../shared/auth';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
+
+    const auth = useContext(AuthContext);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -25,10 +28,13 @@ const Categories = () => {
 
     return (
         <div>
-            <div className="button-container" style={{ textAlign: 'right' }}>
-                <Link to="/categories/new" className="like-button">Add Category</Link>
-            </div>
+            {auth.isLoggedIn && (
+                <div className="button-container" style={{ textAlign: 'right' }}>
+                    <Link to="/categories/new" className="like-button">Add Category</Link>
+                </div>
+            )}
             <br />
+
             <h1 className="category_title">Categories</h1>
             <div className="categories">
                 {categories.map(category => (

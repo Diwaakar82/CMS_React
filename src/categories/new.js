@@ -7,9 +7,11 @@ function CategoryNew() {
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
 
+  const storedData = JSON.parse(localStorage.getItem('userData'));
+
   const yourConfig = {
     headers: {
-        Authorization: "Bearer " + process.env.REACT_APP_BEARER_TOKEN
+        Authorization: "Bearer " + storedData['token']
     }
   }
 

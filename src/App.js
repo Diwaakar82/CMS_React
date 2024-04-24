@@ -39,6 +39,8 @@ function App() {
           <Route path = "/posts/new" element = {<NewPost />} />
           <Route path = "posts/:postId/edit" element = {<EditPost />} />
           <Route path = "posts/:postId" element = {<PostDetails />} />
+
+          <Route path="users/login" element = {<Login />} /> 
         </Route>
         <Route path = "*" element = {<NoPage />} />
       </Routes>

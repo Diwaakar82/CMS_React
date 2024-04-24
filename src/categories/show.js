@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../shared/auth';
 
 function CategoryShow() {
   const { categoryId } = useParams();
@@ -10,10 +11,13 @@ function CategoryShow() {
   const location = useLocation();
   const { categoryName } = location.state
 
-  const yourConfig = {
-    headers: {
-        Authorization: "Bearer " + process.env.REACT_APP_BEARER_TOKEN
-    }
+  const auth = useContext(AuthContext);
+  const storedData = JSON.parse(localStorage.getItem('userData'));
+
+  const yourConfig = {};
+  if(auth.isLoggedIn)
+    yourConfig['headers'] = {
+      Authorization: "Bearer " + storedData['token']
   }
 
   useEffect(() => {
@@ -57,10 +61,12 @@ function CategoryShow() {
 
       <h1 className="category_title">{categoryName}</h1>
 
-      <div className="post-actions">
-        <Link to={`/categories/${categoryId}/edit`} state={{ categoryName: categoryName }} className="links">Edit</Link>
-        <button onClick={handleDelete} className="delete-button">Delete</button>
-      </div>
+      { auth.isLoggedIn && (
+        <div className="post-actions">
+          <Link to={`/categories/${categoryId}/edit`} state={{ categoryName: categoryName }} className="links">Edit</Link>
+          <button onClick={handleDelete} className="delete-button">Delete</button>
+        </div>
+      )}
 	
       <div className="post-container">
         {categoryPosts.map(post => (
@@ -69,15 +75,17 @@ function CategoryShow() {
               <Link to={`/posts/${post.ID}`}>{post.TITLE}</Link>
             </div>
 
-            <div className="post-actions">
-              <Link to={`/edit/${post.ID}`}>Edit</Link>
+            { auth.isLoggedIn && (<>
+                <div className="post-actions">
+                  <Link to={`/edit/${post.ID}`}>Edit</Link>
 
-			  {/* onClick={() => handlePostDelete(post.ID)} */}
+            {/* onClick={() => handlePostDelete(post.ID)} */}
 
-              <button className="delete-button">
-                Delete
-              </button>
-            </div>
+                  <button className="delete-button">
+                    Delete
+                  </button>
+                </div>
+            </>)}
           </div>
         ))}
       </div>

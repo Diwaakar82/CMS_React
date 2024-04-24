@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../shared/auth';
 
 function PostDetails() {
   const { postId } = useParams();
   const [ post, setPost ] = useState(null);
   const [ deleteComment, setDeleteComment ] = useState(false);
 
+  const auth = useContext(AuthContext);
 
   const navigate = useNavigate();
+  const storedData = JSON.parse(localStorage.getItem('userData'));
 
-  const yourConfig = {
-    headers: {
-        Authorization: "Bearer " + process.env.REACT_APP_BEARER_TOKEN
-    }
+  const yourConfig = {};
+  if(auth.isLoggedIn)
+    yourConfig['headers'] = {
+      Authorization: "Bearer " + storedData['token']
   }
 
   useEffect(() => {
@@ -61,8 +64,6 @@ function PostDetails() {
       </div>
       <h1>{post.TITLE}</h1>
 
-      {/* <p><strong>Posted by:</strong> {username(post.userId)}</p> */}
-
       <p><strong>Description:</strong> {post.DESCRIPTION}</p>
       <p>{post.LIKES === 1 ? 'Like: ' : 'Likes: '}{post.LIKES}</p>
 
@@ -74,16 +75,20 @@ function PostDetails() {
           ))}
         </p>
       }
-      <div className="post-actions">
-        <Link to={`/posts/${post.ID}/edit`} state={{ currentPost: post }} className="links">Edit</Link>
-        <button onClick={handleDelete} className="delete-button">Delete</button>
-      </div>
-      <div className="like-button">
-        Like
-      </div>
+      { auth.isLoggedIn && <>
+        <div className="post-actions">
+          <Link to={`/posts/${post.ID}/edit`} state={{ currentPost: post }} className="links">Edit</Link>
+          <button onClick={handleDelete} className="delete-button">Delete</button>
+        </div>
+        <div className="like-button">
+          Like
+        </div>
+      </>}
+
       <div className="comment-form">
         {/* Comment form */}
       </div>
+
       {post.comments && (
         <div className="post-comment-box">
           <h2>Comments:</h2>
@@ -91,9 +96,11 @@ function PostDetails() {
             <div key={comment.id} className="comment">
               <p><strong>Commenter:</strong> {comment.id}</p>
               <p><strong>Comment:</strong> {comment.TEXT}</p>
-              <div className="comment-actions">
-                <button onClick={() => handleCommentDelete(comment.id)} className="delete-button">Delete</button>
-              </div>
+              { auth.isLoggedIn && 
+                <div className="comment-actions">
+                  <button onClick={() => handleCommentDelete(comment.id)} className="delete-button">Delete</button>
+                </div>
+              }
             </div>
           ))}
         </div>

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../shared/auth';
 
 function Posts() {
   const [posts, setPosts] = useState([]);
+  const auth = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -38,9 +40,11 @@ function Posts() {
 
   return (
     <div>
-        <p className="button-container" style={{ textAlign: 'right' }}>
-            <a href="posts/new" className="like-button">Add post</a>
-        </p>
+        { auth.isLoggedIn && (
+          <p className="button-container" style={{ textAlign: 'right' }}>
+              <a href="posts/new" className="like-button">Add post</a>
+          </p>
+        )}
 
       <h1 className="category_title">Posts</h1>
 
@@ -54,10 +58,12 @@ function Posts() {
             <div className="post-actions">
               <a href={`/posts/${post.ID}`}>Show</a>
 
-                <button className="like-button" onClick={() => likePost(post.ID)}>
-                    Like
-                  {/* {post.likes.find(like => like.user_id === currentUserId) ? 'Unlike' : 'Like'} */}
-                </button>
+                {auth.isLoggedIn && 
+                  <button className="like-button" onClick={() => likePost(post.ID)}>
+                      Like
+                    {/* {post.likes.find(like => like.user_id === currentUserId) ? 'Unlike' : 'Like'} */}
+                  </button>
+                }
             </div>
           </div>
         ))}
