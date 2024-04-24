@@ -33,28 +33,14 @@ function CategoryEdit() {
       await axios.patch(`/categories/${categoryId}`, {'title': category}, yourConfig);
       navigate(`/categories/posts/${categoryId}`, {state: { categoryName: category }});
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        setErrors(error.response.data.errors);
-      } else {
+      if (error.response && error.response.data && error.response.data.errors)
         console.error('Failed to update category:', error);
       }
     }
-  };
 
   return (
     <div>
       <h2 className="category_title">Edit Category</h2>
-
-      {errors.length > 0 && (
-        <div id="error_explanation">
-          <h2>{errors.length} {errors.length === 1 ? 'error' : 'errors'} prohibited this category from being saved:</h2>
-          <ul>
-            {errors.map((msg, index) => (
-              <li key={index}>{msg}</li>
-            ))}
-          </ul>
-        </div>
-      )}
 
       <form onSubmit={handleSubmit} className="category-form">
         <input type="hidden" name="_method" value="patch" />

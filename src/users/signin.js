@@ -25,7 +25,6 @@ function SignIn() {
     e.preventDefault();
     try {
       const response = await axios.post('/users/signin', user);
-      console.log(response.data);
 
       navigate('/login');
     } catch (error) {

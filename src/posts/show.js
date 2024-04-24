@@ -6,6 +6,7 @@ import { AuthContext } from '../shared/auth';
 function PostDetails() {
   const { postId } = useParams();
   const [ post, setPost ] = useState(null);
+  const [ comment, setComment ] = useState('');
   const [ deleteComment, setDeleteComment ] = useState(false);
 
   const auth = useContext(AuthContext);
@@ -24,14 +25,31 @@ function PostDetails() {
         try {
           const response = await axios.get(`/posts/${postId}`, yourConfig);
           setPost(response.data[0]);
-          console.log(response.data[0]);
         } catch (error) {
           console.error('Error fetching post:', error);
         }
     };
 
     fetchPost();
-  }, [postId]);
+  }, [postId, deleteComment, comment]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData(e.target);
+
+      const body = {};
+      body['commenter'] = formData['commenter'];
+      body['text'] = comment;
+      body['userId'] = formData['userId'];
+
+      await axios.post(`/posts/${postId}/comments`, body, yourConfig);
+      setComment('');
+    } catch (error) {
+        console.error('Failed to create category:', error);
+      }
+    }
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure?')) {
@@ -45,7 +63,6 @@ function PostDetails() {
   };
 
   const handleCommentDelete = async (commentId) => {
-    console.log(commentId);
     if (window.confirm('Are you sure?')) {
       try {
         await axios.delete(`/posts/${post.ID}/comments/${commentId}`, yourConfig);
@@ -86,7 +103,28 @@ function PostDetails() {
       </>}
 
       <div className="comment-form">
-        {/* Comment form */}
+        <h2>Add Comment:</h2>
+        <form onSubmit={handleSubmit} className="comment-form">
+
+          <input type="hidden" id="commenter" value={storedData['name']} className="form-control" />
+
+          <div className="form-group">
+            <label htmlFor="text" className="form-label">Comment:</label><br />
+            <input
+              type="text"
+              id="text"
+              className="form-control"
+              value={comment}
+              onChange={(e) => {setComment(e.target.value)}}
+            />
+          </div>
+
+          <input type="hidden" id="userId" value={storedData['userId']} className="form-control" />
+
+          <div className="button-container">
+            <button type="submit" className="like-button">Submit</button>
+          </div>
+        </form>
       </div>
 
       {post.comments && (
@@ -94,7 +132,7 @@ function PostDetails() {
           <h2>Comments:</h2>
           {post.comments.map(comment => (
             <div key={comment.id} className="comment">
-              <p><strong>Commenter:</strong> {comment.id}</p>
+              <p><strong>Commenter:</strong> {comment.commenter}</p>
               <p><strong>Comment:</strong> {comment.TEXT}</p>
               { auth.isLoggedIn && 
                 <div className="comment-actions">

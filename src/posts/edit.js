@@ -5,7 +5,6 @@ import axios from 'axios';
 function EditPost() {
   const { postId } = useParams();
   const navigate = useNavigate();
-  const [ errors, setErrors ] = useState([]);
   const [ categories, setCategories ] = useState([]);
   const [ categoryIds, setCategoryIds ] = useState([]);
   const [ post, setPost ] = useState(null);
@@ -45,13 +44,9 @@ function EditPost() {
 
       navigate(`/posts/${post.ID}`);
     } catch (error) {
-        if (error.response) {
-            setErrors(error.response.data.errors);
-        } else {
             console.error('Error updating post:', error);
         }
     }
-  };
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -92,17 +87,6 @@ function EditPost() {
       <h2>Edit Post</h2>
       {post && (
       <form onSubmit={handleSubmit}>
-        {/* {errors.length > 0 && (
-          <div id="error_explanation">
-            <h2>{errors.length} {errors.length === 1 ? 'error' : 'errors'} prohibited this post from being saved:</h2>
-            <ul>
-              {errors.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          </div>
-        )} */}
-
         <input type="hidden" name="_method" value="patch" />
         
         <div className="form-group">
@@ -115,15 +99,13 @@ function EditPost() {
           <input type="text" id="description" name="description" defaultValue={post.DESCRIPTION} className="form-control" />
         </div>
         
-        {/* Placeholder */}
-        <input type="hidden" name="user_id" value="3" />
+        <input type="hidden" name="user_id" value={storedData['userId']} />
 
         <div className="change-categories">
           <div>Change categories</div>
           <br />
           {categories.map(category => (
             <div key={category.id}>
-                {console.log(post.categories, categoryIds, categoryIds.includes(category.id))}
                 <input type="checkbox" id={category.id} name={category.title} value={category.id} checked={categoryIds.includes(category.id)} onChange={handleCheck} />
                 <label>{category.title}</label>
                 <br />

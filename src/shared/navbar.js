@@ -32,7 +32,6 @@ function Navbar() {
 
               { auth.isLoggedIn && (
                 <>
-                  <li><Link to="/users/1/my_posts" className="my-posts-nav">My Posts</Link></li>
                   <li style={{ float: 'right' }}><Link onClick={logout} className="signout-nav">Sign Out</Link></li>
                 </>
               )}

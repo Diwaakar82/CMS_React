@@ -30,7 +30,6 @@ function NewPost() {
     try {
       data['category_ids'] = categoryIds;
       await axios.post('/posts', data, yourConfig);
-      console.log("hwejnfk");
     } catch (error) {
       console.error('Error creating post:', error.response);
     }
@@ -57,16 +56,6 @@ function NewPost() {
     <div>
       <h2 className="category_title">New Post</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="category-form">
-        {errors && (
-          <div id="error_explanation">
-            <h2>{Object.keys(errors).length} {Object.keys(errors).length === 1 ? 'error' : 'errors'} prohibited this post from being saved:</h2>
-            <ul>
-              {Object.keys(errors).map((key, index) => (
-                <li key={index}>{errors[key].message}</li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         <div className="form-group">
           <label htmlFor="title" className="form-label">Title</label><br />

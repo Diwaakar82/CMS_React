@@ -7,6 +7,7 @@ function CategoryShow() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
   const [categoryPosts, setCategoryPosts] = useState(null);
+  const [deletedPost, setDeletedPost] = useState(false);
 
   const location = useLocation();
   const { categoryName } = location.state
@@ -26,7 +27,8 @@ function CategoryShow() {
         const response = await axios.get(`/categories/posts/${categoryId}`);
 		
 		setCategoryPosts(response.data);
-
+    setDeletedPost(!deletedPost);
+    
 		document.querySelectorAll('.category-nav').forEach(function(element) {
 			element.classList.add('active');
 		  });
@@ -36,7 +38,18 @@ function CategoryShow() {
     };
 
     fetchCategory();
-  }, [categoryId]);
+  }, [categoryId, deletedPost]);
+
+  const handlePostDelete = async (postId) => {
+    if (window.confirm('Are you sure?')) {
+      try {
+        await axios.delete(`/posts/${postId}`, yourConfig);
+        setDeletedPost(!deletedPost);
+      } catch (error) {
+        console.error('Failed to delete category:', error);
+      }
+    }
+  }
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure?')) {
@@ -79,9 +92,7 @@ function CategoryShow() {
                 <div className="post-actions">
                   <Link to={`/edit/${post.ID}`}>Edit</Link>
 
-            {/* onClick={() => handlePostDelete(post.ID)} */}
-
-                  <button className="delete-button">
+                  <button className="delete-button" onClick={() => handlePostDelete(post.ID)}>
                     Delete
                   </button>
                 </div>
